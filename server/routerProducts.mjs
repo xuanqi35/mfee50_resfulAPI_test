@@ -144,105 +144,105 @@ app.listen(3000, () => {
   console.log("server is running at http://localhost:3000");
 });
 
-function productSearch(req){
-  return new Promise((resolve, reject) => {
-    const id = req.query.id;
-    let result = db.data.products.find( u => u.id === id);
-    if(result){
-      resolve(result);
-    }else{
-      reject(new Error("找不到相對應的資料"));
-    }
-  });
-}
+// function productSearch(req){
+//   return new Promise((resolve, reject) => {
+//     const id = req.query.id;
+//     let result = db.data.products.find( u => u.id === id);
+//     if(result){
+//       resolve(result);
+//     }else{
+//       reject(new Error("找不到相對應的資料"));
+//     }
+//   });
+// }
 
-function productDelete(req){
-  return new Promise( async (resolve, reject) => {
-    const id = req.params.id;
-    const { id: idToken } = req.decoded;
-    if(id !== idToken){
-      return reject(new Error("沒有權限"));
-    }
-    let product = db.data.products.find(u => u.id === id);
-    db.data.products = db.data.products.filter(u => u.id !== id);
-    await db.write();
-    resolve(product);
-  });
-}
+// function productDelete(req){
+//   return new Promise( async (resolve, reject) => {
+//     const id = req.params.id;
+//     const { id: idToken } = req.decoded;
+//     if(id !== idToken){
+//       return reject(new Error("沒有權限"));
+//     }
+//     let product = db.data.products.find(u => u.id === id);
+//     db.data.products = db.data.products.filter(u => u.id !== id);
+//     await db.write();
+//     resolve(product);
+//   });
+// }
 
-function productUpdate(req){
-  return new Promise(async (resolve, reject) => {
-    const id = req.params.id;
-    const { title, price, stock} = req.body;
-    const { id: idToken } = req.decoded;
-    if(id !== idToken){
-      return reject(new Error("沒有權限"));
-    }
-    let product = db.data.products.find(u => u.id === id);
-    if(product){
-      Object.assign(product, {title, price, stock});
-      await db.write();
-      resolve(product);
-    }
-  });
-}
+// function productUpdate(req){
+//   return new Promise(async (resolve, reject) => {
+//     const id = req.params.id;
+//     const { title, price, stock} = req.body;
+//     const { id: idToken } = req.decoded;
+//     if(id !== idToken){
+//       return reject(new Error("沒有權限"));
+//     }
+//     let product = db.data.products.find(u => u.id === id);
+//     if(product){
+//       Object.assign(product, {title, price, stock});
+//       await db.write();
+//       resolve(product);
+//     }
+//   });
+// }
 
-function productAdd(req){
-  return new Promise(async (resolve, reject) => {
-    const { title, price, stock, createTime} = req.body;
-    let result = db.data.products.find(u => u.title === title);
-    if(result){
-      return reject(new Error("菜已經有人賣了"));
-    }
-    const id = uuidv4();
-    db.data.products.push({id, title, price, stock, createTime});
-    await db.write();
-    resolve(id);
-  });
-}
+// function productAdd(req){
+//   return new Promise(async (resolve, reject) => {
+//     const { title, price, stock, createTime} = req.body;
+//     let result = db.data.products.find(u => u.title === title);
+//     if(result){
+//       return reject(new Error("菜已經有人賣了"));
+//     }
+//     const id = uuidv4();
+//     db.data.products.push({id, title, price, stock, createTime});
+//     await db.write();
+//     resolve(id);
+//   });
+// }
 
-function userSingle(req){
-  return new Promise((resolve, reject) => {
-    const id = req.params.id;
-    let result = db.data.users.find((u) => u.id === id);
-    if(result){
-      resolve(result);
-    }else{
-      reject(new Error("找不到產品"))
-    }
-  });
-}
+// function userSingle(req){
+//   return new Promise((resolve, reject) => {
+//     const id = req.params.id;
+//     let result = db.data.users.find((u) => u.id === id);
+//     if(result){
+//       resolve(result);
+//     }else{
+//       reject(new Error("找不到產品"))
+//     }
+//   });
+// }
 
-function usersAll(){
-  return new Promise((resolve, reject) => {
-    let users = db.data.users;
-    if(users){
-      resolve(users);
-    }else{
-      reject(new Error("找不到產品"));
-    }
-  });
-}
+// function usersAll(){
+//   return new Promise((resolve, reject) => {
+//     let users = db.data.users;
+//     if(users){
+//       resolve(users);
+//     }else{
+//       reject(new Error("找不到產品"));
+//     }
+//   });
+// }
 
 
-function checkToken (req, res, next){
-  let token = req.get("Authorization");
-  if(token && token.startsWith("Bearer ")){
-    token = token.slice(7);
-    jwt.verify(token, secretKey, (err, decoded) => {
-      if(err){
-        return res.status(401).json({
-          status: "error",
-          message: "登入驗證失效，請重新登入"
-    });
-      }
-      req.decoded = decoded;
-      next();
-    });
-  }else{
-    return res.status(401).json({
-      status: "error",
-      message: "無登入驗證資料，請重新登入"
-    });
-  }
-}
+// function checkToken (req, res, next){
+//   let token = req.get("Authorization");
+//   if(token && token.startsWith("Bearer ")){
+//     token = token.slice(7);
+//     jwt.verify(token, secretKey, (err, decoded) => {
+//       if(err){
+//         return res.status(401).json({
+//           status: "error",
+//           message: "登入驗證失效，請重新登入"
+//     });
+//       }
+//       req.decoded = decoded;
+//       next();
+//     });
+//   }else{
+//     return res.status(401).json({
+//       status: "error",
+//       message: "無登入驗證資料，請重新登入"
+//     });
+//   }
+// }
